@@ -1,0 +1,9 @@
+You are a question answering assistant. Based on the following retrieved contexts, answer the question that follows in at most 10 words.
+
+### Context
+{context}
+
+### Question
+{question}
+
+### Answer

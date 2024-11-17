@@ -1,0 +1,79 @@
+---
+run_name: "inference-server"
+
+embeddings:
+  model: "Snowflake/snowflake-arctic-embed-m-long"
+  dim: 768
+  device: "cpu"
+
+indexing:
+  batch_size: 16
+  index_type: "hnsw"
+
+indexes:
+  hnsw_pq:
+    hnsw_m: 32
+    pq_m: 16
+    bits: 8
+    ef_construction: 100
+    ef_search: 64
+  hnsw:
+    hnsw_m: 32
+    ef_construction: 100
+    ef_search: 64
+
+rag:
+  dense_k: 10
+  mode: "inference" # validation or inference
+
+  reranking:
+    enabled: true
+    reranking_k: 3
+    model: "BAAI/bge-reranker-v2-m3"
+    device: "cpu"
+
+  summary:
+    enabled: true
+    # uses the same model as hyde
+
+  hyde:
+    enabled: true
+    model: "unsloth/Llama-3.2-3B-Instruct-bnb-4bit"
+    max_seq_length: 2048
+    load_in_4bit: true
+    device: "cpu"
+    max_new_tokens: 256
+
+  sparse:
+    enabled: false
+    model: "tomaarsen/span-marker-roberta-large-fewnerd-fine-super"
+    device: "cpu"
+    sparse_k: 5
+
+
+  reader:
+    model: "jiviteshjn/pittsburgh-rag-qa-mistral-finetuned"
+    max_seq_length: 2048
+    load_in_4bit: true
+    device: "cpu"
+    batch_size: 4
+    max_new_tokens: 64
+
+
+files:
+  index: "data/contexts__1024__snowflake-arctic-embed-m-long__hnsw__32_100_64.index"
+  sparse_index: "data/contexts__1024.sparse_index"
+
+  context: "/kaggle/input/contexts__1024__with_entities.jsonl"
+  embeddings: "/kaggle/input/contexts__1024__snowflake-arctic-embed-m-long.csv"
+
+  questions_jsonl: "/kaggle/input/questions__annotated.jsonl"
+  answers_jsonl: "/kaggle/working/answers__annotated__combo-dense-10-no-sparse-rerank-4-hyde-mistral-finetuned.jsonl"
+
+  questions_txt: "/kaggle/input/questions__test__split/questions_part_2.txt"
+  answers_txt: "/kaggle/working/answers__test__testset-final-2-256-dense-10-no-sparse-rerank-3-summary-hyde-mistral-finetuned.txt"
+
+wandb:
+  enabled: false
+  entity: "INSERT ENTITY"
+  project: "INERT PROJECT"
