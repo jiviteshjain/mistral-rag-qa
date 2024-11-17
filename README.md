@@ -229,3 +229,7 @@ The x-axis label corresponds to dense k - sparse k - reranking k. The first two 
 </div>
 
 Mistral 7B performs the best on our test set according to the SQuAD exact match metric, which Gemma 2B performs better according to the SQuAD F1 metric, hence the star. The fine-tuned models perform significantly better than off-the-shelf models (which manage to get a 0 on the exact match metric).
+
+## Demo app screenshot
+
+![demo screenshot](assets/app.jpg)
